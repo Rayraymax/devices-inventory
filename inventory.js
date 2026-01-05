@@ -2,14 +2,13 @@ let devices = JSON.parse(localStorage.getItem("devices")) || [];
 let nextId = devices.length ? devices[devices.length - 1].id + 1 : 1;
 let currentUpdateId = null;
 
-// Add a new device
+// Add a new device (only with Date Received, no Returned Date yet)
 function addDevice() {
   let dateReceived = document.getElementById("dateReceived").value;
   let name = document.getElementById("name").value;
   let region = document.getElementById("region").value;
   let phone = document.getElementById("phone").value;
   let serial = document.getElementById("serial").value;
-  let returnedDate = document.getElementById("returnedDate").value;
   let reason = document.getElementById("reason").value;
   let status = document.getElementById("status").value;
 
@@ -26,7 +25,7 @@ function addDevice() {
     phone,
     serial,
     status,
-    returnedDate,
+    returnedDate: "", // initially empty
     reason
   });
 
@@ -88,6 +87,7 @@ function openModal(id) {
   let device = devices.find(d => d.id === id);
   document.getElementById("updateStatus").value = device.status;
   document.getElementById("updateReason").value = device.reason;
+  document.getElementById("updateReturnedDate").value = device.returnedDate || "";
   document.getElementById("updateModal").style.display = "block";
 }
 
@@ -100,6 +100,7 @@ function saveUpdate() {
   if (device) {
     device.status = document.getElementById("updateStatus").value;
     device.reason = document.getElementById("updateReason").value;
+    device.returnedDate = document.getElementById("updateReturnedDate").value;
     saveDevices();
     renderTable();
     closeModal();
@@ -138,3 +139,4 @@ function saveDevices() {
 
 // Initial render
 renderTable();
+
